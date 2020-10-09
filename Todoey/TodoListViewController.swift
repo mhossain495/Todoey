@@ -34,10 +34,29 @@ class TodoListViewController: UITableViewController {
         // Create reusable cell
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath) as UITableViewCell
         
+        // Populate cell of TableView with elements of array
         cell.textLabel?.text = itemArray[indexPath.row]
         
         return cell
         
+    }
+    
+    // Mark - TableView Delegate Methods
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        //print(itemArray[indexPath.row])
+        
+        // Add checkmark when selecting cell or remove checkmark if already checked
+        if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark {
+            tableView.cellForRow(at: indexPath)?.accessoryType = .none
+        } else {
+        
+            tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
+            
+        }
+        
+        
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     
