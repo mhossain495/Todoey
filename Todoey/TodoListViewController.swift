@@ -8,7 +8,7 @@ import UIKit
 
 class TodoListViewController: UITableViewController {
 
-    let itemArray = ["Laundry", "Buy groceries", "Practice coding"]
+    var itemArray = ["Laundry", "Buy groceries", "Practice coding"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,10 +70,14 @@ class TodoListViewController: UITableViewController {
         
         // 2. Action when user clicks the Add Item button
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
-            // What will happen once the user clicks the Add Item button on UIAlert
-            print(textField.text)
+            
+            // When user clicks the Add Item button on UIAlert, the new item gets added to array
+            self.itemArray.append(textField.text!)
+            
+            // Populate table with newly added item in array
+            self.tableView.reloadData()
         }
-        // 3. Grab the value from the text field and print it
+        // 3. Add a text field to the alert
         alert.addTextField { (alertTextField) in
             alertTextField.placeholder = "Create new item"
             textField = alertTextField
@@ -83,7 +87,7 @@ class TodoListViewController: UITableViewController {
         // 4. Present the alert
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
-        
+
     }
     
 
