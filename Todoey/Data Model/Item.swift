@@ -13,5 +13,5 @@ import Foundation
 class Item {
     
     var title: String = ""
-    var done: Boolean = false
+    var done: Bool = false
 }
