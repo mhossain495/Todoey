@@ -26,6 +26,7 @@ class TodoListViewController: UITableViewController {
         newItem2.title = "Write Code"
         itemArray.append(newItem2)
         
+        
         //if let items = defaults.array(forKey: "TodoListArray") as? [String] {
             //itemArray = items
        // }
@@ -56,13 +57,11 @@ class TodoListViewController: UITableViewController {
         // Populate cell of TableView with elements of array
         cell.textLabel?.text = item.title
         
+        // Ternary operator instead of if else statement to display checkmark when selecting cell or remove checkmark if already checked
+        // value = check whether condition is true ? valueIfTrue : valueIfFalse
+        cell.accessoryType = item.done ? .checkmark : .none
         
-        // Display checkmark when selecting cell or remove checkmark if already checked
-        if item.done == true {
-            cell.accessoryType = .checkmark
-        } else {
-            cell.accessoryType = .none
-        }
+    
         
         return cell
         
