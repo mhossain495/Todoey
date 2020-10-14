@@ -10,7 +10,7 @@ import Foundation
 
 // Class for to do item and whether task is completed
 
-class Item {
+class Item: Encodable {
     
     var title: String = ""
     var done: Bool = false
