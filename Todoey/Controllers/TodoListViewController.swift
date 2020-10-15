@@ -76,10 +76,10 @@ class TodoListViewController: UITableViewController {
         // Add or remove check mark to selected to do item by inverting .done property Bool value
         itemArray[indexPath.row].done = !itemArray[indexPath.row].done
         
+        // Call function to reload table data to reflect check mark changes
+        saveItems()
         
-        // Reload table data to reflect check mark changes
-        tableView.reloadData()
-        
+        // Change background view of cell
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
@@ -101,18 +101,9 @@ class TodoListViewController: UITableViewController {
             
             self.itemArray.append(newItem)
             
-            // Store newly added item and array to UserDefaults with unique key TodoListArray
-            let encoder = PropertyListEncoder()
+            // Cal function to encode new item data, save to directory, and reload data
+            self.saveItems()
             
-            do {
-                let data = try encoder.encode(self.itemArray)
-                try data.write(to: self.dataFilePath!)
-            } catch {
-                print("Error encoding item arry, \(error)")
-            }
-            
-            // Populate table with newly added item in array
-            self.tableView.reloadData()
         }
         // 3. Add a text field to the alert
         alert.addTextField { (alertTextField) in
@@ -127,6 +118,23 @@ class TodoListViewController: UITableViewController {
 
     }
     
+    //MARK: - Model Manipulation Methods
+    
+    func saveItems() {
+       
+        // Encode new item data, save to directory, and reload data
+        let encoder = PropertyListEncoder()
+        
+        do {
+            let data = try encoder.encode(itemArray)
+            try data.write(to: dataFilePath!)
+        } catch {
+            print("Error encoding item array, \(error)")
+        }
+        
+        // Populate table with newly added item in array
+        tableView.reloadData()
+    }
 
 }
 
