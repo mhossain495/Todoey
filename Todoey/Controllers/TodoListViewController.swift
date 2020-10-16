@@ -95,7 +95,7 @@ class TodoListViewController: UITableViewController {
             
             self.itemArray.append(newItem)
             
-            // Cal function to encode new item data, save to directory, and reload data
+            // Call function to encode new item data, save to directory, and reload data
             self.saveItems()
             
         }
@@ -116,7 +116,7 @@ class TodoListViewController: UITableViewController {
     
     func saveItems() {
        
-        // Encode new item data, save to directory, and reload data
+        // Encode new item data to be written to plist, save to directory, and reload data
         let encoder = PropertyListEncoder()
         
         do {
@@ -130,7 +130,7 @@ class TodoListViewController: UITableViewController {
         self.tableView.reloadData()
     }
     
-    // Load decoded data
+    // Load decoded data from plist
     func loadItems() {
         if let data = try? Data(contentsOf: dataFilePath!) {
             let decoder = PropertyListDecoder()
