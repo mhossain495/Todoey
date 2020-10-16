@@ -5,6 +5,7 @@
 
 
 import UIKit
+import CoreData
 
 class TodoListViewController: UITableViewController {
     
@@ -14,13 +15,16 @@ class TodoListViewController: UITableViewController {
     // Create file path to Documents directory
     let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
     
+    // Access to AppDelegate as object
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
         
         
-        loadItems()
+//        loadItems()
         
         //if let items = defaults.array(forKey: "TodoListArray") as? [Item] {
          //   itemArray = items
@@ -56,7 +60,6 @@ class TodoListViewController: UITableViewController {
         // value = check whether condition is true ? valueIfTrue : valueIfFalse
         cell.accessoryType = item.done ? .checkmark : .none
         
-    
         
         return cell
         
@@ -90,8 +93,10 @@ class TodoListViewController: UITableViewController {
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
             
             // When user clicks the Add Item button on UIAlert, the new item gets added to array
-            let newItem = Item()
+            
+            let newItem = Item(context: self.context)
             newItem.title = textField.text!
+            newItem.done = false
             
             self.itemArray.append(newItem)
             
@@ -114,16 +119,13 @@ class TodoListViewController: UITableViewController {
     
     //MARK: - Model Manipulation Methods
     
+    // Save new to do item
     func saveItems() {
-       
-        // Encode new item data to be written to plist, save to directory, and reload data
-        let encoder = PropertyListEncoder()
         
         do {
-            let data = try encoder.encode(itemArray)
-            try data.write(to: dataFilePath!)
+            try context.save()
         } catch {
-            print("Error encoding item array, \(error)")
+            print("Error saving context \(error)")
         }
         
         // Populate table with newly added item in array
@@ -131,15 +133,15 @@ class TodoListViewController: UITableViewController {
     }
     
     // Load decoded data from plist
-    func loadItems() {
-        if let data = try? Data(contentsOf: dataFilePath!) {
-            let decoder = PropertyListDecoder()
-            do {
-            itemArray = try decoder.decode([Item].self, from: data)
-            } catch {
-                print("Error decoding item array, \(error)")
-            }
-        }
-    }
+//    func loadItems() {
+//        if let data = try? Data(contentsOf: dataFilePath!) {
+//            let decoder = PropertyListDecoder()
+//            do {
+//            itemArray = try decoder.decode([Item].self, from: data)
+//            } catch {
+//                print("Error decoding item array, \(error)")
+//            }
+//        }
+//    }
     
 }
