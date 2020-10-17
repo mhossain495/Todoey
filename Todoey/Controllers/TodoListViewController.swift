@@ -12,19 +12,17 @@ class TodoListViewController: UITableViewController {
     
     var itemArray = [Item]()
     
-    // Create file path to Documents directory
-    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
-    
-    // Access to AppDelegate as object
+  
+    // Access to context of persistent container to allow app to interact with database
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
+        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         
-        
-//        loadItems()
+        loadItems()
         
         //if let items = defaults.array(forKey: "TodoListArray") as? [Item] {
          //   itemArray = items
@@ -92,7 +90,7 @@ class TodoListViewController: UITableViewController {
         // 2. Action when user clicks the Add Item button
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
             
-            // When user clicks the Add Item button on UIAlert, the new item gets added to array
+            // When user clicks the Add Item button on UIAlert, new NSManagedObject or row is created
             
             let newItem = Item(context: self.context)
             newItem.title = textField.text!
@@ -119,7 +117,7 @@ class TodoListViewController: UITableViewController {
     
     //MARK: - Model Manipulation Methods
     
-    // Save new to do item
+    // Save new to do item in context, a temporary area that tracks changes to item properties
     func saveItems() {
         
         do {
@@ -132,16 +130,16 @@ class TodoListViewController: UITableViewController {
         self.tableView.reloadData()
     }
     
-    // Load decoded data from plist
-//    func loadItems() {
-//        if let data = try? Data(contentsOf: dataFilePath!) {
-//            let decoder = PropertyListDecoder()
-//            do {
-//            itemArray = try decoder.decode([Item].self, from: data)
-//            } catch {
-//                print("Error decoding item array, \(error)")
-//            }
-//        }
-//    }
-    
+    // Load data from database into itemArray at startup
+    func loadItems() {
+        // Fetch all data of type Item
+        let request: NSFetchRequest<Item> = Item.fetchRequest()
+        do {
+        itemArray = try context.fetch(request)
+        } catch {
+            print("Error fetching data from context \(error)")
+        }
+}
+
+
 }

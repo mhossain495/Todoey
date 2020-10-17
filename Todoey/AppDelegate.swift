@@ -30,6 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: - Core Data stack
     lazy var persistentContainer: NSPersistentContainer = {
         
+        // Create persistent store coordinator to read and write data to sqlite database
         let container = NSPersistentContainer(name: "DataModel")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
