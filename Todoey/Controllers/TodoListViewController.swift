@@ -48,7 +48,7 @@ class TodoListViewController: UITableViewController {
         // Create reusable cell
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath) as UITableViewCell
         
-        // Item constant for reusability
+        // Item constant for reusability. IndexPath.row is index number of selected to do item row
         let item = itemArray[indexPath.row]
         
         // Populate cell of TableView with elements of array
@@ -67,11 +67,15 @@ class TodoListViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+        // Delete selected item from context and array; saveItems function will commit delete to be reflected
+        context.delete(itemArray[indexPath.row])
+        itemArray.remove(at: indexPath.row)
+        
         
         // Add or remove check mark to selected to do item by inverting .done property Bool value
-        itemArray[indexPath.row].done = !itemArray[indexPath.row].done
+        //itemArray[indexPath.row].done = !itemArray[indexPath.row].done
         
-        // Call function to reload table data to reflect check mark changes
+        // Call function to commit changes and reload table data to reflect check mark changes
         saveItems()
         
         // Change background view of cell
