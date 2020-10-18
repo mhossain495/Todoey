@@ -6,9 +6,9 @@
 
 import UIKit
 import CoreData
+import Foundation
 
 class TodoListViewController: UITableViewController {
-    
     
     var itemArray = [Item]()
     
@@ -24,9 +24,6 @@ class TodoListViewController: UITableViewController {
         
         loadItems()
         
-        //if let items = defaults.array(forKey: "TodoListArray") as? [Item] {
-         //   itemArray = items
-       // }
     }
 
     //MARK: - Tableview Datasource Methods
@@ -80,7 +77,11 @@ class TodoListViewController: UITableViewController {
         
         // Change background view of cell
         tableView.deselectRow(at: indexPath, animated: true)
+    
+    
     }
+    
+ 
     
    //MARK: - Add New Items
     
@@ -134,16 +135,36 @@ class TodoListViewController: UITableViewController {
         self.tableView.reloadData()
     }
     
-    // Load data from database into itemArray at startup
-    func loadItems() {
-        // Fetch all data of type Item
-        let request: NSFetchRequest<Item> = Item.fetchRequest()
+    // Load data from database into itemArray at startup and fetch all data of type Item
+    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()) {
+        
         do {
-        itemArray = try context.fetch(request)
+            itemArray = try context.fetch(request)
         } catch {
             print("Error fetching data from context \(error)")
         }
+    }
+    
+    
 }
 
+//MARK: - Search bar methods
 
+extension TodoListViewController: UISearchBarDelegate {
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        let request : NSFetchRequest<Item> = Item.fetchRequest()
+        
+        // Set predicate to search for items in database; %@ = searchBart.text
+        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+        
+        // Sort search reasults by alphabetical order
+        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+
+        // Pass request to loadItems function to fetch sorted results data
+        
+        loadItems(with: request)
+        
+    }
 }
