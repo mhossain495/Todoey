@@ -143,6 +143,9 @@ class TodoListViewController: UITableViewController {
         } catch {
             print("Error fetching data from context \(error)")
         }
+        
+        // Reloads the rows of table view and redisplays updates to data
+        tableView.reloadData()
     }
     
     
@@ -163,13 +166,14 @@ extension TodoListViewController: UISearchBarDelegate {
         request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
 
         // Pass request to loadItems function to fetch sorted results data
-        
         loadItems(with: request)
         
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchBar.text?.count == 0 {
+        
+        // If search bar is empty then load original data and resign keyboard
+        if searchBar.text?.isEmpty == true {
             loadItems()
             
             // Use DispatchQueue to run code in main queue
@@ -179,7 +183,18 @@ extension TodoListViewController: UISearchBarDelegate {
                 
             }
             
+        // If search bar is not empty, then search while user is entering text
+        } else {
+            let request : NSFetchRequest<Item> = Item.fetchRequest()
+            
+            // Set predicate to search for items in database; %@ = searchBart.text
+            request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!) // [cd] = case and diacritic insensitive
+            
+            // Sort search reasults by alphabetical order
+            request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
 
+            // Pass request to loadItems function to fetch sorted results data
+            loadItems(with: request)
         }
     }
     
