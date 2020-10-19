@@ -135,7 +135,7 @@ class TodoListViewController: UITableViewController {
         self.tableView.reloadData()
     }
     
-    // Load data from database into itemArray at startup and fetch all data of type Item
+    // Default request to load all items from database into itemArray
     func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()) {
         
         do {
@@ -157,7 +157,7 @@ extension TodoListViewController: UISearchBarDelegate {
         let request : NSFetchRequest<Item> = Item.fetchRequest()
         
         // Set predicate to search for items in database; %@ = searchBart.text
-        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!) // [cd] = case and diacritic insensitive
         
         // Sort search reasults by alphabetical order
         request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
@@ -167,4 +167,20 @@ extension TodoListViewController: UISearchBarDelegate {
         loadItems(with: request)
         
     }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar.text?.count == 0 {
+            loadItems()
+            
+            // Use DispatchQueue to run code in main queue
+            DispatchQueue.main.async {
+                // Dismiss search bar as the active item and dismiss keyboard
+                searchBar.resignFirstResponder()
+                
+            }
+            
+
+        }
+    }
+    
 }
