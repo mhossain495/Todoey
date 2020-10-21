@@ -6,7 +6,6 @@
 
 import UIKit
 import CoreData
-import Foundation
 
 class TodoListViewController: UITableViewController {
     
@@ -51,9 +50,6 @@ class TodoListViewController: UITableViewController {
         // Populate cell of TableView with elements of array
         cell.textLabel?.text = item.title
         
-        // Ternary operator instead of if else statement to display checkmark when selecting cell or remove checkmark if already checked
-        // value = check whether condition is true ? valueIfTrue : valueIfFalse
-        cell.accessoryType = item.done ? .checkmark : .none
         
         
         return cell
