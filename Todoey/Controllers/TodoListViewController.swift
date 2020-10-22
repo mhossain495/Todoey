@@ -11,6 +11,12 @@ class TodoListViewController: UITableViewController {
     
     var itemArray = [Item]()
     
+    // Call loadItems once selectedCategory is set with a value
+    var selectedCategory: Category? {
+        didSet {
+            loadItems()
+        }
+    }
   
     // Access to context of persistent container to allow app to interact with database
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -21,7 +27,6 @@ class TodoListViewController: UITableViewController {
         
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         
-        loadItems()
         
     }
 
@@ -96,6 +101,7 @@ class TodoListViewController: UITableViewController {
             let newItem = Item(context: self.context)
             newItem.title = textField.text!
             newItem.done = false
+            newItem.parentCategory = self.selectedCategory
             
             self.itemArray.append(newItem)
             
@@ -132,7 +138,17 @@ class TodoListViewController: UITableViewController {
     }
     
     // Default request to load all items from database into itemArray
-    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()) {
+    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest(), predicate: NSPredicate? = nil) {
+        
+        // Load results where parentCategory matches selected Category
+        let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
+        
+        if let additionalPredicate = predicate {
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, additionalPredicate])
+        } else {
+            request.predicate = categoryPredicate
+        }
+        
         
         do {
             itemArray = try context.fetch(request)
@@ -156,13 +172,13 @@ extension TodoListViewController: UISearchBarDelegate {
         let request : NSFetchRequest<Item> = Item.fetchRequest()
         
         // Set predicate to search for items in database; %@ = searchBart.text
-        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!) // [cd] = case and diacritic insensitive
+        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!) // [cd] = case and diacritic insensitive
         
         // Sort search reasults by alphabetical order
         request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
 
         // Pass request to loadItems function to fetch sorted results data
-        loadItems(with: request)
+        loadItems(with: request, predicate: predicate)
         
     }
     
