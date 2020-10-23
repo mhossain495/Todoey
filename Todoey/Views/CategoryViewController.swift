@@ -127,7 +127,9 @@ class CategoryViewController: UITableViewController {
     }
     
     // Default request to load all categories from database into categoryArray
-    func loadCategories(with request: NSFetchRequest<Category> = Category.fetchRequest()) {
+    func loadCategories() {
+        
+    let request: NSFetchRequest<Category> = Category.fetchRequest()
         
         do {
             categoryArray = try context.fetch(request)
