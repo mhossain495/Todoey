@@ -12,7 +12,7 @@ class TodoListViewController: UITableViewController {
     var itemArray = [Item]()
     
     // Call loadItems once selectedCategory is set with a value
-    var selectedCategory: Category? {
+    var selectedCategory : Category? {
         didSet {
             loadItems()
         }
@@ -55,7 +55,7 @@ class TodoListViewController: UITableViewController {
         // Populate cell of TableView with elements of array
         cell.textLabel?.text = item.title
         
-        
+        cell.accessoryType = item.done ? .checkmark : .none
         
         return cell
         
@@ -66,12 +66,13 @@ class TodoListViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         // Delete selected item from context and array; saveItems function will commit delete to be reflected
-        context.delete(itemArray[indexPath.row])
-        itemArray.remove(at: indexPath.row)
+        
+        //context.delete(itemArray[inadexPath.row])
+        //itemArray.remove(at: indexPath.row)
         
         
         // Add or remove check mark to selected to do item by inverting .done property Bool value
-        //itemArray[indexPath.row].done = !itemArray[indexPath.row].done
+        itemArray[indexPath.row].done = !itemArray[indexPath.row].done
         
         // Call function to commit changes and reload table data to reflect check mark changes
         saveItems()
@@ -143,8 +144,8 @@ class TodoListViewController: UITableViewController {
         // Load results where parentCategory matches selected Category
         let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
         
-        if let additionalPredicate = predicate {
-            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, additionalPredicate])
+        if let addtionalPredicate = predicate {
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, addtionalPredicate])
         } else {
             request.predicate = categoryPredicate
         }
