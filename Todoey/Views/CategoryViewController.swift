@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import ChameleonFramework
 
 
 class CategoryViewController: SwipeTableViewController {
@@ -23,6 +24,8 @@ class CategoryViewController: SwipeTableViewController {
         
         tableView.rowHeight = 80
         
+        // set reusable cell separator style when adding background color
+        tableView.separatorStyle = .none
         
         loadCategories()
     }
@@ -47,6 +50,7 @@ class CategoryViewController: SwipeTableViewController {
     // Display array data in cells
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
+        
         // Create reusable swipe cell and add to table at indexPath
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
 
@@ -60,6 +64,8 @@ class CategoryViewController: SwipeTableViewController {
         //cell.textLabel?.text = categoryArray?[indexPath.row].name ?? "No Categories Added Yet"
        // cell.delegate = self
         
+        // Change cell background color
+        cell.backgroundColor = UIColor(hexString: <#T##String#>)
         
         return cell
         
