@@ -15,6 +15,9 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // set rown height for swipeable cells to avoid cut off of delete icon
+        tableView.rowHeight = 80
 
     }
     

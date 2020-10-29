@@ -22,8 +22,6 @@ class CategoryViewController: SwipeTableViewController {
         super.viewDidLoad()
         
         
-        tableView.rowHeight = 80
-        
         // set reusable cell separator style when adding background color
         tableView.separatorStyle = .none
         

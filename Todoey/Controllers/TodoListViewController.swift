@@ -7,7 +7,7 @@
 import UIKit
 import CoreData
 
-class TodoListViewController: UITableViewController {
+class TodoListViewController: SwipeTableViewController {
     
     var itemArray = [Item]()
     
@@ -47,10 +47,18 @@ class TodoListViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         // Create reusable cell
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath) as UITableViewCell
+//        let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath) as UITableViewCell
+        
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
+        
+        // Item constant for reusability. IndexPath.row is index number of selected category row
+        let item = itemArray[indexPath.row]
+        
+        // Populate cell of TableView with elements of array
+        cell.textLabel?.text = item.title
         
         // Item constant for reusability. IndexPath.row is index number of selected to do item row
-        let item = itemArray[indexPath.row]
+        //let item = itemArray[indexPath.row]
         
         // Populate cell of TableView with elements of array
         cell.textLabel?.text = item.title
@@ -161,6 +169,16 @@ class TodoListViewController: UITableViewController {
         tableView.reloadData()
     }
     
+    override func updateModel(at indexPath: IndexPath) {
+        
+        // Delete item from context before saving and removing from array to avoid crash
+        context.delete(itemArray[indexPath.row] as NSManagedObject)
+        saveItems()
+        
+        // Allows user to select trash icon to delete row after swiping from right side
+        self.itemArray.remove(at: indexPath.row)
+        super.updateModel(at: indexPath)
+    }
     
 }
 
