@@ -65,7 +65,7 @@ class CategoryViewController: SwipeTableViewController {
        // cell.delegate = self
         
         // Change cell background color
-        cell.backgroundColor = UIColor(hexString: <#T##String#>)
+        //cell.backgroundColor = UIColor(hexString: <#T##String#>)
         
         return cell
         
@@ -124,14 +124,14 @@ class CategoryViewController: SwipeTableViewController {
     
     override func updateModel(at indexPath: IndexPath) {
         
-        super.updateModel(at: indexPath)
+        // Delete category from context before saving and removing from array to avoid crash
+        context.delete(categoryArray[indexPath.row] as NSManagedObject)
+        saveCategories()
         
         // Allows user to select trash icon to delete row after swiping from right side
         self.categoryArray.remove(at: indexPath.row)
-        
-  
+        super.updateModel(at: indexPath)
     }
-    
     
     
     
@@ -153,6 +153,7 @@ class CategoryViewController: SwipeTableViewController {
             let newCategory = Category(context: self.context)
             newCategory.name = textField.text!
 
+    
             
             self.categoryArray.append(newCategory)
             
