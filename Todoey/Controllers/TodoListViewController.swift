@@ -25,9 +25,6 @@ class TodoListViewController: SwipeTableViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
-        
-        
     }
 
     //MARK: - Tableview Datasource Methods
@@ -47,18 +44,10 @@ class TodoListViewController: SwipeTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         // Create reusable cell
-//        let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath) as UITableViewCell
-        
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
         // Item constant for reusability. IndexPath.row is index number of selected category row
         let item = itemArray[indexPath.row]
-        
-        // Populate cell of TableView with elements of array
-        cell.textLabel?.text = item.title
-        
-        // Item constant for reusability. IndexPath.row is index number of selected to do item row
-        //let item = itemArray[indexPath.row]
         
         // Populate cell of TableView with elements of array
         cell.textLabel?.text = item.title
@@ -73,21 +62,15 @@ class TodoListViewController: SwipeTableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        // Delete selected item from context and array; saveItems function will commit delete to be reflected
-        
-        //context.delete(itemArray[inadexPath.row])
-        //itemArray.remove(at: indexPath.row)
-        
-        
+
         // Add or remove check mark to selected to do item by inverting .done property Bool value
         itemArray[indexPath.row].done = !itemArray[indexPath.row].done
         
         // Call function to commit changes and reload table data to reflect check mark changes
         saveItems()
         
-        // Change background view of cell
+        // Change background view of cell to remove gray background when selecting cell
         tableView.deselectRow(at: indexPath, animated: true)
-    
     
     }
     
@@ -169,6 +152,8 @@ class TodoListViewController: SwipeTableViewController {
         tableView.reloadData()
     }
     
+    // Delete selected item from context and array; saveItems function will commit delete to be reflected
+
     override func updateModel(at indexPath: IndexPath) {
         
         // Delete item from context before saving and removing from array to avoid crash

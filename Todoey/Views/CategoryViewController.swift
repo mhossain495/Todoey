@@ -59,11 +59,8 @@ class CategoryViewController: SwipeTableViewController {
         // Populate cell of TableView with elements of array
         cell.textLabel?.text = category.name
         
-        //cell.textLabel?.text = categoryArray?[indexPath.row].name ?? "No Categories Added Yet"
-       // cell.delegate = self
-        
-        // Change cell background color
-        //cell.backgroundColor = UIColor(hexString: <#T##String#>)
+        // Change cell background color based on random calor saved when category created
+        cell.backgroundColor = UIColor(hexString: categoryArray[indexPath.row].color ?? "1D9BF6")
         
         return cell
         
@@ -150,7 +147,7 @@ class CategoryViewController: SwipeTableViewController {
             
             let newCategory = Category(context: self.context)
             newCategory.name = textField.text!
-
+            newCategory.color = UIColor.randomFlat().hexValue()
     
             
             self.categoryArray.append(newCategory)
