@@ -22,13 +22,19 @@ class CategoryViewController: SwipeTableViewController {
         super.viewDidLoad()
         
         
-        // set reusable cell separator style when adding background color
+        // Set reusable cell separator style when adding background color
         tableView.separatorStyle = .none
         
         loadCategories()
     }
 
-
+    // Set navigation bar color in CategoryViewController to blue, a default color for app
+    override func viewWillAppear(_ animated: Bool) {
+            
+        guard let navBar = navigationController?.navigationBar else { fatalError("Navigation controller does not exist")
+        }
+        navBar.backgroundColor = UIColor(hexString: "1D9BF6")
+    }
     
     //MARK: - TableView Datasource Methods
     

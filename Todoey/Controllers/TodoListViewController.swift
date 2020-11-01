@@ -35,20 +35,33 @@ class TodoListViewController: SwipeTableViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     
     // Set navigation bar and search bar color to match category cell color
-    
  
     override func viewWillAppear(_ animated: Bool) {
         
         // Title of navigation bar will equal category name
         title = selectedCategory!.name
         
+        // Category cell color passed to colorHex if not nil
         if let colorHex = selectedCategory?.color {
             
             guard let navBar = navigationController?.navigationBar else {fatalError("Navigation controller does not exist")}
             
-            navBar.backgroundColor = UIColor(hexString: colorHex )
+            if let navBarColor = UIColor(hexString: colorHex ) {
+                
+                // Navigation background color to match category cell color
+                navBar.backgroundColor = navBarColor
+                
+                // Navigation button colors and large text to contrast with specified color
+                navBar.tintColor = ContrastColorOf(navBarColor, returnFlat: true)
+                
+                navBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor:ContrastColorOf(navBarColor, returnFlat: true)]
+                
+                searchBar.backgroundColor = UIColor(hexString: colorHex )
+            }
             
-            searchBar.backgroundColor = UIColor(hexString: colorHex )
+            
+            
+           
             
         }
     }
