@@ -6,6 +6,7 @@
 
 import UIKit
 import CoreData
+import ChameleonFramework
 
 class TodoListViewController: SwipeTableViewController {
     
@@ -25,6 +26,7 @@ class TodoListViewController: SwipeTableViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
+        tableView.separatorStyle = .none
     }
 
     //MARK: - Tableview Datasource Methods
@@ -51,6 +53,10 @@ class TodoListViewController: SwipeTableViewController {
         
         // Populate cell of TableView with elements of array
         cell.textLabel?.text = item.title
+        
+        // Gradient background color of cell
+        cell.backgroundColor = FlatSkyBlue().darken(byPercentage: CGFloat(indexPath.row) / CGFloat(itemArray.count))
+        
         
         cell.accessoryType = item.done ? .checkmark : .none
         
