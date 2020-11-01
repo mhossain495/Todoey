@@ -54,14 +54,16 @@ class TodoListViewController: SwipeTableViewController {
         // Populate cell of TableView with elements of array
         cell.textLabel?.text = item.title
         
-        // Gradient background color of cell
-        cell.backgroundColor = FlatSkyBlue().darken(byPercentage: CGFloat(indexPath.row) / CGFloat(itemArray.count))
-        
+        // Set gradient background color of to do item cells to color of category cells
+        if let color = UIColor(hexString: selectedCategory!.color!)?.darken(byPercentage: CGFloat(indexPath.row) / CGFloat(itemArray.count)) {
+        cell.backgroundColor = color
+        cell.textLabel?.textColor = ContrastColorOf(color, returnFlat: true)
+        }
         
         cell.accessoryType = item.done ? .checkmark : .none
         
         return cell
-        
+
     }
     
     //MARK: - TableView Delegate Methods
