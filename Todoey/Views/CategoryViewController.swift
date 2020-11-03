@@ -66,7 +66,12 @@ class CategoryViewController: SwipeTableViewController {
         cell.textLabel?.text = category.name
         
         // Change cell background color based on random calor saved when category created
-        cell.backgroundColor = UIColor(hexString: categoryArray[indexPath.row].color ?? "1D9BF6")
+        cell.backgroundColor = UIColor(hexString: category.color ?? "1D9BF6")
+        
+        // Contrast item cell text
+        guard let categoryColor = UIColor(hexString: category.color!) else {fatalError()}
+        
+        cell.textLabel?.textColor = ContrastColorOf(categoryColor, returnFlat: true)
         
         return cell
         
